@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prem Britto — .NET Developer</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231e1f22'/%3E%3Ctext x='50%25' y='54%25' font-family='monospace' font-weight='bold' font-size='13' fill='%2338bdf8' text-anchor='middle' dominant-baseline='central'%3EPB%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  /* ── JetBrains backgrounds ── */
+  --canvas-default:    #1e1f22;
+  --canvas-subtle:     #2b2d30;
+  --canvas-inset:      #13141a;
+  --canvas-overlay:    #2b2d30;
+
+  /* ── JetBrains borders ── */
+  --border-default:    #43454a;
+  --border-muted:      #393b40;
+  --border-subtle:     rgba(255,255,255,.07);
+
+
+  --fg-default:        #dfe1e5;
+  --fg-muted:          #9da0a8;
+  --fg-subtle:         #6f737a;
+  --fg-on-emphasis:    #ffffff;
+
+  /* ── Electric Cyan — primary accent ── */
+  --green:             #38bdf8;
+  --green-muted:       #0ea5e9;
+  --green-subtle:      rgba(56,189,248,.15);
+  --green-emphasis:    #7dd3fc;
+
+  /* ── JetBrains Cyan — links ── */
+  --blue:              #6bdfff;
+  --blue-muted:        #2ea8e0;
+  --blue-subtle:       rgba(107,223,255,.12);
+
+  /* ── JetBrains Orange ── */
+  --orange:            #e8754a;
+  --orange-subtle:     rgba(232,117,74,.14);
+
+  /* ── JetBrains Red ── */
+  --red:               #f75464;
+  --red-subtle:        rgba(247,84,100,.14);
+
+  /* ── JetBrains Warm Orange ── */
+  --purple:            #e09b5a;
+  --purple-subtle:     rgba(224,155,90,.14);
+
+  /* ── JetBrains Pink ── */
+  --pink:              #ff79c6;
+
+  /* ── JetBrains buttons ── */
+  --btn-bg:            #2b2d30;
+  --btn-border:        #4d5059;
+  --btn-hover:         #383b40;
+  --btn-primary-bg:    #38bdf8;
+  --btn-primary-hover: #7dd3fc;
+
+  /* ── JetBrains header ── */
+  --header-bg:         #1e1f22;
+  --header-border:     #43454a;
+
+  --mono:    'DM Mono', monospace;
+  --display: 'Fraunces', serif;
+  --sans:    'Syne', sans-serif;
+}
+
+/* ══════════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════════ */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
+html { scroll-behavior:smooth }
+body { background:var(--canvas-default); color:var(--fg-default); font-family:var(--sans); overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a { text-decoration:none; color:inherit }
+
+/* ══════════════════════════════════════════════
+   CURSOR
+══════════════════════════════════════════════ */
+.cur,.cur-r { display:none; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%) }
+@media(hover:hover)and(pointer:fine){
+  body { cursor:none }
+  .cur { display:block; width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green) }
+  .cur-r { display:block; width:26px; height:26px; border:1.5px solid var(--green); border-radius:50%; opacity:.4; z-index:9998; transition:transform .15s ease,opacity .2s }
+}
+
+/* ══════════════════════════════════════════════
+   NAV  — mirrors github.com header exactly
+══════════════════════════════════════════════ */
+nav {
+  position:fixed; inset:0 0 auto; z-index:900;
+  height:62px; display:flex; align-items:center; justify-content:space-between;
+  padding:0 1.25rem;
+  background:var(--header-bg);
+  border-bottom:1px solid var(--header-border);
+}
+.logo {
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.18em;
+  color:var(--fg-default); text-transform:uppercase; white-space:nowrap;
+  display:flex; align-items:center; gap:.6rem;
+}
+.logo-icon { color:var(--fg-default); font-size:1.3rem; line-height:1 }
+
+.nav-ul { list-style:none; display:flex; gap:.3rem; align-items:center }
+.nav-ul a {
+  font-family:var(--mono); font-size:.65rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--fg-default);
+  padding:.4rem .75rem; border-radius:6px;
+  transition:background .15s, color .15s;
+}
+.nav-ul a:hover { background:var(--btn-hover); color:var(--fg-default) }
+
+/* GitHub green "Sign up" style button */
+.nav-cta {
+  background:var(--btn-primary-bg) !important;
+  color:var(--fg-on-emphasis) !important;
+  border:1px solid rgba(240,246,252,.1) !important;
+  border-radius:6px !important; font-weight:600 !important;
+  padding:.4rem .9rem !important;
+}
+.nav-cta:hover { background:var(--btn-primary-hover) !important }
+
+/* hamburger */
+.ham { display:none; flex-direction:column; gap:5px; background:none; border:none; padding:6px; cursor:pointer }
+.ham span { display:block; width:20px; height:2px; background:var(--fg-default); border-radius:2px; transition:all .25s }
+.ham.o span:nth-child(1){ transform:rotate(45deg) translate(5px,5px) }
+.ham.o span:nth-child(2){ opacity:0 }
+.ham.o span:nth-child(3){ transform:rotate(-45deg) translate(5px,-5px) }
+
+/* drawer */
+.drawer {
+  display:none; position:fixed; inset:62px 0 0;
+  background:var(--canvas-subtle); border-top:1px solid var(--border-default);
+  z-index:850; flex-direction:column; padding:1rem 1.25rem; gap:0; overflow-y:auto;
+}
+.drawer.o { display:flex }
+.drawer a {
+  font-family:var(--mono); font-size:.9rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--fg-default); padding:.85rem .5rem; border-bottom:1px solid var(--border-muted);
+  transition:color .15s;
+}
+.drawer a:hover { color:var(--green) }
+.drawer .d-cta {
+  margin-top:1.2rem; text-align:center;
+  background:var(--btn-primary-bg); color:var(--fg-on-emphasis);
+  padding:.9rem; border-radius:6px; font-weight:700;
+  font-family:var(--mono); font-size:.8rem; letter-spacing:.1em; text-transform:uppercase;
+}
+
+/* ══════════════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════════════ */
+.w { position:relative; z-index:1; width:100%; padding:4.5rem 1.2rem }
+@media(min-width:640px)  { .w { padding:5.5rem 2rem } }
+@media(min-width:1024px) { .w { padding:7rem 4rem; max-width:1280px; margin:0 auto } }
+
+.s-default { background:var(--canvas-default); border-top:1px solid var(--border-muted) }
+.s-subtle  { background:var(--canvas-subtle);  border-top:1px solid var(--border-default) }
+
+/* labels & titles */
+.lbl { font-family:var(--mono); font-size:.6rem; letter-spacing:.26em; text-transform:uppercase; color:var(--green); margin-bottom:.45rem; display:flex; align-items:center; gap:.55rem }
+.lbl::before { content:''; width:.9rem; height:1px; background:var(--green); flex-shrink:0 }
+.lbl.blue { color:var(--blue) } .lbl.blue::before { background:var(--blue) }
+.lbl.orange { color:var(--orange) } .lbl.orange::before { background:var(--orange) }
+.lbl.purple { color:var(--purple) } .lbl.purple::before { background:var(--purple) }
+.lbl.red { color:var(--red) } .lbl.red::before { background:var(--red) }
+.lbl.pink { color:var(--pink) } .lbl.pink::before { background:var(--pink) }
+.lbl-c { justify-content:center }
+
+.ttl { font-family:var(--display); font-size:clamp(1.7rem,5vw,2.8rem); font-weight:600; line-height:1.1; letter-spacing:-.02em; margin-bottom:2.2rem; color:var(--fg-default) }
+.ttl em { font-style:italic; font-weight:300; color:var(--blue) }
+
+/* reveal */
+.rv { opacity:0; transform:translateY(20px); transition:opacity .6s ease,transform .6s ease }
+.rv.in { opacity:1; transform:translateY(0) }
+
+/* ══════════════════════════════════════════════
+   BUTTONS  — GitHub style
+══════════════════════════════════════════════ */
+.btn {
+  display:inline-flex; align-items:center; gap:.4rem;
+  font-family:var(--mono); font-size:.67rem; letter-spacing:.1em; text-transform:uppercase;
+  padding:.6rem 1.2rem; border-radius:6px; border:1px solid; transition:all .15s;
+  white-space:nowrap; font-weight:500; cursor:pointer;
+}
+.b-green {
+  background:var(--btn-primary-bg); color:var(--fg-on-emphasis);
+  border-color:rgba(240,246,252,.1); font-weight:700;
+  box-shadow:0 0 0 0 rgba(63,185,80,0);
+}
+.b-green:hover { background:var(--btn-primary-hover); border-color:rgba(240,246,252,.15) }
+.b-default {
+  background:var(--btn-bg); color:var(--fg-default);
+  border-color:var(--btn-border);
+}
+.b-default:hover { background:var(--btn-hover); border-color:var(--border-default) }
+.b-blue {
+  background:var(--blue-muted); color:var(--fg-on-emphasis);
+  border-color:rgba(56,139,253,.4); font-weight:600;
+}
+.b-blue:hover { background:#388bfd; }
+
+/* ══════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════ */
+#hero {
+  min-height:100vh; display:flex; align-items:center;
+  padding:80px 1.2rem 3rem; position:relative; overflow:hidden;
+  background:var(--canvas-default);
+}
+/* GitHub contribution grid feel */
+#hero::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(var(--border-muted) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-muted) 1px, transparent 1px);
+  background-size:44px 44px; opacity:.35;
+}
+#hero::after {
+  content:''; position:absolute; top:-20%; right:-5%;
+  width:60vw; height:60vw; pointer-events:none;
+  background:radial-gradient(circle, rgba(35,134,54,.12) 0%, transparent 65%);
+}
+
+.hi { position:relative; z-index:2; width:100%; max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr; gap:3rem }
+@media(min-width:900px) { .hi { grid-template-columns:1fr 1fr; align-items:center; gap:4rem } }
+
+.hey { font-family:var(--mono); font-size:.63rem; letter-spacing:.22em; text-transform:uppercase; color:var(--green); display:flex; align-items:center; gap:.65rem; margin-bottom:1.1rem; animation:fup .7s ease both }
+.hey::before { content:''; width:1.4rem; height:1px; background:var(--green) }
+.blink { width:7px; height:7px; border-radius:50%; background:var(--green); animation:pulse 2s infinite }
+
+h1 { font-family:var(--display); font-size:clamp(2.8rem,9vw,5.4rem); font-weight:700; line-height:.93; letter-spacing:-.025em; margin-bottom:.55rem; animation:fup .7s .08s ease both; color:var(--fg-default) }
+h1 em { font-style:italic; font-weight:300; color:var(--green) }
+.role { font-family:var(--mono); font-size:clamp(.58rem,1.8vw,.72rem); letter-spacing:.22em; text-transform:uppercase; color:var(--blue); margin-bottom:1.3rem; animation:fup .7s .15s ease both }
+.sub { font-size:clamp(.88rem,2.5vw,.96rem); line-height:1.85; color:var(--fg-muted); max-width:44ch; margin-bottom:2rem; animation:fup .7s .24s ease both }
+.cta { display:flex; gap:.65rem; flex-wrap:wrap; animation:fup .7s .33s ease both }
+
+/* code card */
+.ccard { background:var(--canvas-overlay); border:1px solid var(--border-default); border-radius:6px; overflow:hidden; box-shadow:0 8px 32px rgba(1,4,9,.6) }
+.cbar { background:var(--canvas-subtle); padding:.6rem 1rem; display:flex; align-items:center; gap:.42rem; border-bottom:1px solid var(--border-muted) }
+.d { width:10px; height:10px; border-radius:50% }
+.dr{background:#ff5f57}.dy{background:#febc2e}.dg{background:#28c840}
+.cf { font-family:var(--mono); font-size:.58rem; color:var(--fg-subtle); margin-left:.4rem }
+.cb { padding:1.1rem 1.3rem; font-family:var(--mono); font-size:.69rem; line-height:2.05; overflow-x:auto; background:var(--canvas-inset) }
+.ln{color:var(--fg-subtle);margin-right:.9rem;font-size:.56rem;user-select:none}
+.kw{color:#ff7b72}.tp{color:#ffa657}.fn{color:#79c0ff}.st{color:#a5d6ff}.cm{color:#6e7681;font-style:italic}.op{color:#79c0ff}.vl{color:#6cb6ff}
+
+.htags { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.9rem }
+.ht { font-family:var(--mono); font-size:.56rem; letter-spacing:.1em; text-transform:uppercase; padding:.22rem .6rem; border:1px solid var(--border-default); color:var(--fg-muted); border-radius:20px; transition:all .15s }
+.ht:hover { border-color:var(--green); color:var(--green) }
+
+/* ══════════════════════════════════════════════
+   MARQUEE
+══════════════════════════════════════════════ */
+.mbar { background:var(--canvas-subtle); padding:.7rem 0; overflow:hidden; white-space:nowrap; border-top:1px solid var(--border-default); border-bottom:1px solid var(--border-default) }
+.mtr { display:inline-flex; animation:mrq 26s linear infinite }
+.mi { font-family:var(--mono); font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; padding:0 1.8rem; color:var(--fg-subtle) }
+.ms { color:var(--green) !important }
+@keyframes mrq { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ══════════════════════════════════════════════
+   ABOUT
+══════════════════════════════════════════════ */
+.ag { display:grid; grid-template-columns:1fr; gap:2.5rem }
+@media(min-width:860px) { .ag { grid-template-columns:1.2fr .8fr; gap:4.5rem; align-items:start } }
+.ap { font-size:.93rem; line-height:1.9; color:var(--fg-muted); margin-bottom:.95rem }
+.ap strong { color:var(--fg-default) }
+.hl { color:var(--green); font-weight:600 }
+.quote { margin-top:1.6rem; padding:1rem 1.2rem; background:var(--canvas-overlay); border-left:3px solid var(--green); border-radius:0 6px 6px 0; font-family:var(--display); font-size:.93rem; font-style:italic; color:var(--fg-muted); line-height:1.75 }
+
+/* stats */
+.sgrid { display:grid; grid-template-columns:1fr 1fr; gap:.85rem }
+.sc { background:var(--canvas-overlay); border:1px solid var(--border-default); border-radius:6px; padding:1.2rem; position:relative; overflow:hidden; transition:border-color .15s,transform .15s }
+.sc:hover { border-color:var(--green); transform:translateY(-2px) }
+.sc::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--green),var(--blue)) }
+.sn { font-family:var(--display); font-size:2.1rem; font-weight:700; color:var(--green); line-height:1; margin-bottom:.3rem }
+.sl { font-family:var(--mono); font-size:.57rem; letter-spacing:.14em; text-transform:uppercase; color:var(--fg-subtle) }
+
+/* ══════════════════════════════════════════════
+   SKILLS
+══════════════════════════════════════════════ */
+.skgrid { display:grid; grid-template-columns:1fr; gap:.9rem }
+@media(min-width:540px) { .skgrid { grid-template-columns:1fr 1fr } }
+@media(min-width:960px) { .skgrid { grid-template-columns:repeat(3,1fr) } }
+
+.skc { background:var(--canvas-overlay); border:1px solid var(--border-default); border-radius:6px; padding:1.4rem; transition:border-color .15s,transform .15s }
+.skc:hover { border-color:var(--blue); transform:translateY(-2px) }
+.ski { font-size:1.3rem; margin-bottom:.6rem }
+.skn { font-family:var(--display); font-size:.93rem; font-weight:600; margin-bottom:.8rem; color:var(--fg-default) }
+.tw { display:flex; flex-wrap:wrap; gap:.34rem }
+.tg { font-family:var(--mono); font-size:.56rem; letter-spacing:.08em; text-transform:uppercase; padding:.22rem .58rem; background:var(--canvas-subtle); color:var(--fg-muted); border:1px solid var(--border-muted); border-radius:20px; transition:all .15s }
+.tg:hover { border-color:var(--green); color:var(--green) }
+.tg.a { background:var(--green-subtle); color:var(--green); border-color:rgba(63,185,80,.3) }
+
+/* ══════════════════════════════════════════════
+   EXPERIENCE
+══════════════════════════════════════════════ */
+.ec { background:var(--canvas-overlay); border:1px solid var(--border-default); border-radius:6px; padding:1.6rem; max-width:900px; position:relative; overflow:hidden }
+.ec::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--green),var(--blue),var(--purple)) }
+.eh { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-start; gap:.75rem; margin-bottom:.3rem }
+.er { font-family:var(--display); font-size:clamp(1rem,3vw,1.3rem); font-weight:600; color:var(--fg-default) }
+.ed { font-family:var(--mono); font-size:.58rem; letter-spacing:.1em; text-transform:uppercase; color:var(--fg-muted); background:var(--canvas-subtle); padding:.24rem .68rem; border-radius:20px; border:1px solid var(--border-default); white-space:nowrap }
+.eco { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; color:var(--blue); margin-bottom:.9rem }
+.edesc { font-size:.86rem; line-height:1.85; color:var(--fg-muted); margin-bottom:.85rem }
+.el { list-style:none; margin-bottom:1.2rem }
+.el li { font-size:.84rem; line-height:1.82; color:var(--fg-muted); padding-left:1.2rem; position:relative; margin-bottom:.42rem }
+.el li::before { content:'▸'; position:absolute; left:0; color:var(--green); font-size:.62rem; top:.1rem }
+.etw { display:flex; flex-wrap:wrap; gap:.34rem }
+.et { font-family:var(--mono); font-size:.54rem; letter-spacing:.08em; text-transform:uppercase; border:1px solid var(--border-default); color:var(--fg-muted); padding:.2rem .52rem; border-radius:20px; transition:all .15s }
+.et:hover { border-color:var(--green); color:var(--green) }
+
+/* ══════════════════════════════════════════════
+   PROJECTS
+══════════════════════════════════════════════ */
+.pgrid { display:grid; grid-template-columns:1fr; gap:1rem }
+@media(min-width:640px) { .pgrid { grid-template-columns:1fr 1fr } }
+
+.pc { background:var(--canvas-overlay); border:1px solid var(--border-default); border-radius:6px; padding:1.5rem; display:flex; flex-direction:column; position:relative; overflow:hidden; transition:border-color .15s,transform .15s,box-shadow .15s }
+.pc:hover { border-color:var(--blue); transform:translateY(-3px); box-shadow:0 8px 28px rgba(1,4,9,.5) }
+.pc::before { content:''; position:absolute; top:0; left:0; right:0; height:2px }
+.pc:nth-child(1)::before { background:var(--green) }
+.pc:nth-child(2)::before { background:var(--blue) }
+.pc:nth-child(3)::before { background:var(--orange) }
+.pc:nth-child(4)::before { background:var(--purple) }
+.pn { font-family:var(--mono); font-size:.56rem; letter-spacing:.14em; color:var(--fg-subtle); margin-bottom:.8rem }
+.pc h3 { font-family:var(--display); font-size:1.02rem; font-weight:600; color:var(--fg-default); margin-bottom:.5rem; line-height:1.3 }
+.pc p { font-size:.83rem; line-height:1.8; color:var(--fg-muted); flex:1; margin-bottom:1rem }
+.psw { display:flex; flex-wrap:wrap; gap:.3rem }
+.pt { font-family:var(--mono); font-size:.54rem; letter-spacing:.07em; padding:.2rem .5rem; border-radius:20px; background:var(--blue-subtle); color:var(--blue); border:1px solid rgba(56,139,253,.3) }
+
+/* ══════════════════════════════════════════════
+   TOOLS
+══════════════════════════════════════════════ */
+.tgrid { display:grid; grid-template-columns:repeat(2,1fr); gap:.85rem }
+@media(min-width:440px) { .tgrid { grid-template-columns:repeat(3,1fr) } }
+@media(min-width:760px) { .tgrid { grid-template-columns:repeat(4,1fr) } }
+
+.tc { background:var(--canvas-overlay); border:1px solid var(--border-default); border-radius:6px; padding:1.1rem .9rem; text-align:center; transition:border-color .15s,transform .15s }
+.tc:hover { border-color:var(--orange); transform:translateY(-2px) }
+.tico { font-size:1.5rem; margin-bottom:.4rem }
+.tnm { font-family:var(--mono); font-size:.58rem; letter-spacing:.1em; text-transform:uppercase; color:var(--fg-subtle) }
+
+/* ══════════════════════════════════════════════
+   BIO CARDS
+══════════════════════════════════════════════ */
+.bgrid { display:grid; grid-template-columns:1fr; gap:.9rem }
+@media(min-width:820px) { .bgrid { grid-template-columns:2fr 1fr 1fr } }
+
+.bc { background:var(--canvas-overlay); border:1px solid var(--border-default); border-radius:6px; padding:1.4rem; position:relative; overflow:hidden; transition:border-color .15s }
+.bc:hover { border-color:var(--border-default) }
+.bc::before { content:''; position:absolute; top:0; left:0; right:0; height:2px }
+.bc:nth-child(1)::before { background:var(--blue) }
+.bc:nth-child(2)::before { background:var(--orange) }
+.bc:nth-child(3)::before { background:var(--purple) }
+.blbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.16em; text-transform:uppercase; margin-bottom:.8rem }
+.c-blue{color:var(--blue)}.c-orange{color:var(--orange)}.c-purple{color:var(--purple)}
+.bc p { font-size:.83rem; line-height:1.9; color:var(--fg-muted) }
+.bhl { font-family:var(--display); font-size:.96rem; font-weight:600; line-height:1.65; color:var(--fg-default) }
+.bgh { font-family:var(--mono); font-size:.76rem; line-height:1.85; color:var(--fg-muted) }
+
+/* ══════════════════════════════════════════════
+   CONTACT
+══════════════════════════════════════════════ */
+.cw { max-width:520px; margin:0 auto; text-align:center }
+.cw p { font-size:.92rem; line-height:1.85; color:var(--fg-muted); margin-bottom:2.2rem }
+.cls { display:flex; justify-content:center; gap:.6rem; flex-wrap:wrap }
+.cl { display:inline-flex; align-items:center; gap:.4rem; font-family:var(--mono); font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; padding:.65rem 1.2rem; border:1px solid var(--border-default); color:var(--fg-muted); border-radius:6px; background:var(--btn-bg); transition:all .15s }
+.cl:hover { border-color:var(--border-default); background:var(--btn-hover); color:var(--fg-default) }
+.cl.p { background:var(--btn-primary-bg); color:var(--fg-on-emphasis); border-color:rgba(240,246,252,.1); font-weight:700 }
+.cl.p:hover { background:var(--btn-primary-hover); color:var(--fg-on-emphasis) }
+
+/* ══════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════ */
+footer { background:var(--canvas-subtle); border-top:1px solid var(--border-default); padding:1.2rem 1.25rem; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:.5rem; font-family:var(--mono); font-size:.56rem; letter-spacing:.1em; text-transform:uppercase; color:var(--fg-subtle) }
+.footer-gh { display:flex; align-items:center; gap:.4rem; color:var(--fg-muted) }
+
+/* ══════════════════════════════════════════════
+   KEYFRAMES
+══════════════════════════════════════════════ */
+@keyframes fup { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.75)} }
+</style>
+</head>
+<body>
+
+<div class="cur"   id="cur"></div>
+<div class="cur-r" id="curr"></div>
+
+<!-- ━━━━━ NAV ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<nav>
+  <div class="logo">
+    <span class="logo-icon">⬡</span>
+    Prem Britto
+  </div>
+  <ul class="nav-ul" id="nul">
+    <li><a href="javascript:void(0)" data-s="about">About</a></li>
+    <li><a href="javascript:void(0)" data-s="skills">Skills</a></li>
+    <li><a href="javascript:void(0)" data-s="experience">Experience</a></li>
+    <li><a href="javascript:void(0)" data-s="projects">Projects</a></li>
+    <li><a href="javascript:void(0)" data-s="tools">Tools</a></li>
+    <li><a href="javascript:void(0)" data-s="contact">Contact</a></li>
+    <li><a href="#" class="nav-cta">⬇ Resume</a></li>
+  </ul>
+  <button class="ham" id="ham" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="drawer" id="drw">
+  <a href="javascript:void(0)" data-s="about">About</a>
+  <a href="javascript:void(0)" data-s="skills">Skills</a>
+  <a href="javascript:void(0)" data-s="experience">Experience</a>
+  <a href="javascript:void(0)" data-s="projects">Projects</a>
+  <a href="javascript:void(0)" data-s="tools">Tools</a>
+  <a href="javascript:void(0)" data-s="contact">Contact</a>
+  <a href="#" class="d-cta">⬇ Download Resume</a>
+</div>
+
+<!-- ━━━━━ HERO ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="hero">
+  <div class="hi">
+    <div>
+      <div class="hey"><div class="blink"></div>Open to new opportunities</div>
+      <h1>Prem<br><em>Britto</em></h1>
+      <div class="role">.NET Developer · Backend Engineer</div>
+      <p class="sub">Building reliable, scalable backend systems with C# and .NET Core. Specialised in enterprise applications, Windows Services &amp; secure API integration — 2 years of real-world impact.</p>
+      <div class="cta">
+        <a href="javascript:void(0)" data-s="projects" class="btn b-green">View My Work</a>
+        <a href="javascript:void(0)" data-s="contact"  class="btn b-default">Get In Touch</a>
+        <a href="#" class="btn b-blue">⬇ Resume</a>
+      </div>
+    </div>
+
+    <div class="rv">
+      <!-- code card -->
+      <div class="ccard">
+        <div class="cbar">
+          <span class="d dr"></span><span class="d dy"></span><span class="d dg"></span>
+          <span class="cf">Developer.cs</span>
+        </div>
+        <div class="cb">
+          <div><span class="ln">1</span><span class="cm">// Prem Britto — .NET Developer</span></div>
+          <div><span class="ln">2</span><span class="kw">public class</span> <span class="tp">Developer</span></div>
+          <div><span class="ln">3</span>{</div>
+          <div><span class="ln">4</span>&nbsp;&nbsp;<span class="kw">string</span> <span class="fn">Name</span><span class="op"> = </span><span class="st">"Prem Britto"</span>;</div>
+          <div><span class="ln">5</span>&nbsp;&nbsp;<span class="kw">string</span> <span class="fn">Stack</span><span class="op"> = </span><span class="st">"C# / .NET Core"</span>;</div>
+          <div><span class="ln">6</span>&nbsp;&nbsp;<span class="kw">float</span>&nbsp; <span class="fn">Exp</span><span class="op"> = </span><span class="vl">2.0f</span>; <span class="cm">// years</span></div>
+          <div><span class="ln">7</span>&nbsp;&nbsp;<span class="kw">bool</span>&nbsp;&nbsp; <span class="fn">OpenToWork</span><span class="op"> = </span><span class="vl">true</span>;</div>
+          <div><span class="ln">8</span>}</div>
+        </div>
+      </div>
+      <div class="htags">
+        <span class="ht">C#</span><span class="ht">.NET Core</span><span class="ht">SQL Server</span>
+        <span class="ht">Azure</span><span class="ht">Windows Services</span><span class="ht">REST APIs</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━ MARQUEE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<div class="mbar" aria-hidden="true">
+  <div class="mtr">
+    <span class="mi">C# .NET Core</span><span class="mi ms">✦</span>
+    <span class="mi">ASP.NET Web API</span><span class="mi ms">✦</span>
+    <span class="mi">SQL Server</span><span class="mi ms">✦</span>
+    <span class="mi">Windows Services</span><span class="mi ms">✦</span>
+    <span class="mi">REST API Integration</span><span class="mi ms">✦</span>
+    <span class="mi">Azure</span><span class="mi ms">✦</span>
+    <span class="mi">DevExpress WinForms</span><span class="mi ms">✦</span>
+    <span class="mi">SSL / TLS</span><span class="mi ms">✦</span>
+    <span class="mi">Git · Postman · SSMS</span><span class="mi ms">✦</span>
+    <span class="mi">C# .NET Core</span><span class="mi ms">✦</span>
+    <span class="mi">ASP.NET Web API</span><span class="mi ms">✦</span>
+    <span class="mi">SQL Server</span><span class="mi ms">✦</span>
+    <span class="mi">Windows Services</span><span class="mi ms">✦</span>
+    <span class="mi">REST API Integration</span><span class="mi ms">✦</span>
+    <span class="mi">Azure</span><span class="mi ms">✦</span>
+    <span class="mi">DevExpress WinForms</span><span class="mi ms">✦</span>
+    <span class="mi">SSL / TLS</span><span class="mi ms">✦</span>
+    <span class="mi">Git · Postman · SSMS</span><span class="mi ms">✦</span>
+  </div>
+</div>
+
+<!-- ━━━━━ ABOUT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="about" class="s-subtle">
+  <div class="w">
+    <div class="ag">
+      <div class="rv">
+        <div class="lbl">About Me</div>
+        <h2 class="ttl">Backend dev who builds things that <em>last</em></h2>
+        <p class="ap">I'm <strong>Prem Britto</strong>, a <span class="hl">.NET Developer</span> with 2 years of hands-on experience building backend systems for enterprise applications. My work spans <strong>printer management platforms</strong> and <strong>cybersecurity solutions</strong> — environments where uptime, data integrity, and security are non-negotiable.</p>
+        <p class="ap">I specialise in <strong>C#, ASP.NET Core, SQL Server</strong>, and <strong>Windows Services</strong>. I've built dynamic API orchestration layers, optimised production SQL pipelines, and implemented secure communication modules serving real enterprise clients.</p>
+        <p class="ap">My goal is to grow into a <strong>Senior .NET Engineer</strong> — designing systems with intent and driving technical decisions confidently.</p>
+        <div class="quote">"I don't just fix bugs — I understand why they happened and make sure they don't come back."</div>
+      </div>
+      <div class="rv">
+        <div class="sgrid">
+          <div class="sc"><div class="sn">2</div><div class="sl">Years Exp</div></div>
+          <div class="sc"><div class="sn">10+</div><div class="sl">Features Shipped</div></div>
+          <div class="sc"><div class="sn">2</div><div class="sl">Domains</div></div>
+          <div class="sc"><div class="sn">∞</div><div class="sl">Lines of C#</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━ SKILLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="skills" class="s-default">
+  <div class="w">
+    <div class="lbl blue rv">Technical Skills</div>
+    <h2 class="ttl rv" style="--em:var(--blue)">My <em>toolkit</em></h2>
+    <div class="skgrid">
+      <div class="skc rv"><div class="ski">⚙️</div><div class="skn">Backend &amp; Core</div><div class="tw"><span class="tg a">C#</span><span class="tg a">.NET Core</span><span class="tg">ASP.NET Web API</span><span class="tg">Entity Framework</span><span class="tg">LINQ</span><span class="tg">Windows Services</span><span class="tg">DI</span></div></div>
+      <div class="skc rv"><div class="ski">🗄️</div><div class="skn">Database &amp; SQL</div><div class="tw"><span class="tg a">SQL Server</span><span class="tg">Stored Procedures</span><span class="tg">Temp Tables</span><span class="tg">Transactions</span><span class="tg">Query Optimisation</span><span class="tg">SSMS</span></div></div>
+      <div class="skc rv"><div class="ski">☁️</div><div class="skn">Cloud &amp; Integration</div><div class="tw"><span class="tg a">Azure App Services</span><span class="tg">Azure SQL</span><span class="tg">REST API</span><span class="tg">JSON Processing</span><span class="tg">HttpClient</span></div></div>
+      <div class="skc rv"><div class="ski">🛡️</div><div class="skn">Security &amp; Config</div><div class="tw"><span class="tg">SSL / TLS</span><span class="tg">Certificate Handling</span><span class="tg">HTTPS</span><span class="tg">Auth Middleware</span><span class="tg">Secure API Comm.</span></div></div>
+      <div class="skc rv"><div class="ski">🖥️</div><div class="skn">UI &amp; Reporting</div><div class="tw"><span class="tg a">DevExpress WinForms</span><span class="tg">Data Binding</span><span class="tg">Grid Components</span><span class="tg">Report Generation</span></div></div>
+      <div class="skc rv"><div class="ski">🏗️</div><div class="skn">Architecture</div><div class="tw"><span class="tg">Clean Architecture</span><span class="tg">SOLID</span><span class="tg">Repository Pattern</span><span class="tg">OOP</span><span class="tg">Config-Driven Design</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━ EXPERIENCE ━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="experience" class="s-subtle">
+  <div class="w">
+    <div class="lbl rv">Work Experience</div>
+    <h2 class="ttl rv">Where I've <em>made impact</em></h2>
+    <div class="ec rv">
+      <div class="eh">
+        <div class="er">Software Developer — .NET</div>
+        <div class="ed">2023 — Present</div>
+      </div>
+      <div class="eco">Enterprise Application Division · Printer &amp; Cybersecurity Domain</div>
+      <p class="edesc">Building and maintaining enterprise backend systems handling real-time device data, dynamic API orchestration, and secure communications across diverse customer environments.</p>
+      <ul class="el">
+        <li>Developed Windows Services that dynamically call external APIs based on per-customer configuration, enabling one codebase to serve hundreds of enterprise clients with different workflows.</li>
+        <li>Implemented bulk data insert operations using SQL temp tables and transactions — replacing slow row-by-row inserts with a high-throughput, rollback-safe pipeline.</li>
+        <li>Designed JSON-based device metadata classification logic to dynamically categorise and route device data to correct downstream systems at runtime.</li>
+        <li>Identified and optimised production SQL stored procedures causing slowdowns — reduced execution time via index tuning and query restructuring.</li>
+        <li>Configured SSL/TLS certificate handling for secure API communication across enterprise network environments.</li>
+        <li>Built DevExpress WinForms UI components for internal management dashboards used by enterprise clients.</li>
+      </ul>
+      <div class="etw">
+        <span class="et">C#</span><span class="et">ASP.NET Core</span><span class="et">Windows Services</span>
+        <span class="et">SQL Server</span><span class="et">DevExpress</span><span class="et">Azure</span>
+        <span class="et">REST APIs</span><span class="et">SSL/TLS</span><span class="et">JSON</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━ PROJECTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="projects" class="s-default">
+  <div class="w">
+    <div class="lbl orange rv">Projects / Work Highlights</div>
+    <h2 class="ttl rv">Things I've <em>built</em></h2>
+    <div class="pgrid">
+      <div class="pc rv"><div class="pn">01 / Backend Services</div><h3>Dynamic API Orchestration Service</h3><p>A Windows Service that reads customer config at startup and dynamically determines which APIs to call — enabling one codebase to serve hundreds of enterprise clients with unique workflows.</p><div class="psw"><span class="pt">C# .NET</span><span class="pt">Windows Service</span><span class="pt">REST API</span><span class="pt">JSON Config</span><span class="pt">SQL Server</span></div></div>
+      <div class="pc rv"><div class="pn">02 / Data Engineering</div><h3>Bulk Insert Pipeline with Transactions</h3><p>High-throughput insert system using SQL temp tables and explicit transactions. Handles thousands of records reliably with rollback safety, replacing a row-by-row approach failing under load.</p><div class="psw"><span class="pt">SQL Server</span><span class="pt">Stored Procedures</span><span class="pt">Temp Tables</span><span class="pt">Transactions</span><span class="pt">C#</span></div></div>
+      <div class="pc rv"><div class="pn">03 / Device Intelligence</div><h3>JSON Device Metadata Classifier</h3><p>Classification engine parsing JSON payloads from device types and applying rule-based logic to categorise and route metadata — replacing hardcoded logic with a dynamic config-driven model.</p><div class="psw"><span class="pt">C#</span><span class="pt">JSON Processing</span><span class="pt">.NET Core</span><span class="pt">EF Core</span><span class="pt">SQL Server</span></div></div>
+      <div class="pc rv"><div class="pn">04 / Security &amp; Config</div><h3>Secure API Communication Module</h3><p>SSL/TLS certificate config for enterprise API clients in restricted network environments. Handles cert loading, HTTPS enforcement, and custom validation to meet strict security standards.</p><div class="psw"><span class="pt">ASP.NET Core</span><span class="pt">SSL/TLS</span><span class="pt">HTTPS</span><span class="pt">Certificate Mgmt</span><span class="pt">HttpClient</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━ TOOLS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="tools" class="s-subtle">
+  <div class="w">
+    <div class="lbl purple rv">Tools &amp; Technologies</div>
+    <h2 class="ttl rv">What I work <em>with daily</em></h2>
+    <div class="tgrid">
+      <div class="tc rv"><div class="tico">💻</div><div class="tnm">Visual Studio</div></div>
+      <div class="tc rv"><div class="tico">🗃️</div><div class="tnm">SSMS</div></div>
+      <div class="tc rv"><div class="tico">📬</div><div class="tnm">Postman</div></div>
+      <div class="tc rv"><div class="tico">🔀</div><div class="tnm">Git</div></div>
+      <div class="tc rv"><div class="tico">☁️</div><div class="tnm">Azure Portal</div></div>
+      <div class="tc rv"><div class="tico">📊</div><div class="tnm">DevExpress</div></div>
+      <div class="tc rv"><div class="tico">🐙</div><div class="tnm">GitHub</div></div>
+      <div class="tc rv"><div class="tico">🔐</div><div class="tnm">SSL / TLS Tools</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━ BIO CARDS ━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="bio-cards" class="s-default">
+  <div class="w">
+    <div class="lbl pink rv">Professional Presence</div>
+    <h2 class="ttl rv">Bio, LinkedIn &amp; <em>GitHub</em></h2>
+    <div class="bgrid">
+      <div class="bc rv"><div class="blbl c-blue">📄 Professional Bio</div><p>Prem Britto is a backend-focused .NET Developer with 2 years of experience building enterprise software across printer management and cybersecurity domains. Proficient in C#, ASP.NET Core, SQL Server, and Windows Services, he specialises in dynamic, configuration-driven backend systems that scale across diverse customer environments. He has a proven track record of solving production issues — from optimising slow SQL queries to implementing secure API pipelines. He brings a methodical approach to debugging and a genuine drive to grow into a Senior .NET Engineer.</p></div>
+      <div class="bc rv"><div class="blbl c-orange">💼 LinkedIn Headline</div><div class="bhl">.NET Developer | C# · ASP.NET Core · SQL Server | Backend Engineer in printer tech &amp; cybersecurity | Aspiring Senior .NET Engineer</div></div>
+      <div class="bc rv"><div class="blbl c-purple">🐙 GitHub Bio</div><div class="bgh">.NET Developer · C# &amp; ASP.NET Core. Building Windows Services, REST APIs &amp; SQL pipelines for enterprise apps. Always learning. Growing toward Senior .NET.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━ CONTACT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<section id="contact" class="s-subtle">
+  <div class="w">
+    <div class="cw">
+      <div class="lbl lbl-c rv">Contact</div>
+      <h2 class="ttl rv" style="text-align:center">Let's <em>build together</em></h2>
+      <p class="rv">I'm open to backend .NET opportunities — enterprise apps, API development, or anything that lets me write clean, impactful C# code. Let's connect.</p>
+      <div class="cls rv">
+        <a href="mailto:prembritto1010@gmail.com" class="cl p">✉ Email Me</a>
+        <a href="https://www.linkedin.com/in/prembrittoy?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" class="cl">in LinkedIn</a>
+        <a href="https://github.com/prembritto"target="_blank" class="cl">🐙 GitHub</a>
+        <a href="https://drive.google.com/file/d/1Hptwyp2d22Q7vz0lHaTGrqG5JRsws6nU/view?usp=drivesdk" class="cl">⬇ Resume</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━━━ FOOTER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+<footer>
+  <span>© 2026 — Prem Britto · .NET Developer</span>
+  <div class="footer-gh">🐙 <span>prembritto on GitHub</span></div>
+</footer>
+
+<script>
+/* ── scroll nav ── */
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-s]');
+  if (!t) return;
+  e.preventDefault();
+  const el = document.getElementById(t.getAttribute('data-s'));
+  if (el) { el.scrollIntoView({behavior:'smooth',block:'start'}); closeMenu(); }
+});
+
+/* ── hamburger ── */
+const ham = document.getElementById('ham');
+const drw = document.getElementById('drw');
+ham.addEventListener('click', () => { ham.classList.toggle('o'); drw.classList.toggle('o'); });
+function closeMenu(){ ham.classList.remove('o'); drw.classList.remove('o'); }
+
+/* ── responsive nav ── */
+const nul = document.getElementById('nul');
+function syncNav(){
+  const mb = window.innerWidth <= 768;
+  nul.style.display = mb ? 'none' : 'flex';
+  ham.style.display = mb ? 'flex' : 'none';
+  if (!mb) closeMenu();
+}
+syncNav();
+window.addEventListener('resize', syncNav);
+
+/* ── cursor ── */
+const cur = document.getElementById('cur'), curr = document.getElementById('curr');
+if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e=>{mx=e.clientX;my=e.clientY});
+  (function loop(){
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+    rx+=(mx-rx)*.13; ry+=(my-ry)*.13;
+    curr.style.left=rx+'px'; curr.style.top=ry+'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a,button,.pc,.sc,.skc,.tc,.bc').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cur.style.transform='translate(-50%,-50%) scale(2.2)';curr.style.opacity='.1'});
+    el.addEventListener('mouseleave',()=>{cur.style.transform='translate(-50%,-50%) scale(1)';curr.style.opacity='.4'});
+  });
+}
+
+/* ── scroll reveal ── */
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)} });
+},{threshold:.07});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
